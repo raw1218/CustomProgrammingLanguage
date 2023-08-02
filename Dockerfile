@@ -27,3 +27,6 @@ USER ${NB_USER}
 
 WORKDIR /code/JupyterNotebook
 RUN jupyter kernelspec install ./ --user --name=my_custom_kernel
+
+RUN chown -R ${NB_UID} ${HOME}
+RUN chmod -R 755 ${HOME}
