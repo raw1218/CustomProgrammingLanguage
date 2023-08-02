@@ -11,4 +11,7 @@ WORKDIR ${HOME}
 RUN pip install --no-cache notebook jupyterlab
 
 
+RUN cd /code && ls
+
+
 
