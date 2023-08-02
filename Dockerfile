@@ -26,4 +26,4 @@ USER ${NB_USER}
 
 
 WORKDIR /code/JupyterNotebook
-RUN jupyter kernelspec install
+RUN jupyter kernelspec install ./ --user --name=my_custom_kernel
