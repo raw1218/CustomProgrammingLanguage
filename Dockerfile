@@ -14,6 +14,8 @@ RUN adduser --disabled-password \
     --uid ${NB_UID} \
     ${NB_USER}
 
+WORKDIR ${HOME}
+
 RUN python3 -m pip install --no-cache-dir notebook jupyterlab
 RUN pip install --no-cache-dir jupyterhub
 
