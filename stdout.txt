@@ -1,0 +1,4 @@
+Command 'spike' not found, did you mean:
+  command 'spine' from deb cacti-spine (1.2.19-1)
+  command 'spipe' from deb spiped (1.6.2-1)
+Try: sudo apt install <deb name>

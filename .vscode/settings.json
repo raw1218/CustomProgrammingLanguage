@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "bit": "c",
+        "compare": "c",
+        "cstddef": "c",
+        "deque": "c",
+        "limits": "c",
+        "type_traits": "c",
+        "vector": "c",
+        "xmemory": "c",
+        "xtree": "c",
+        "xutility": "c",
+        "map.h": "c",
+        "tuple": "c",
+        "utility": "c"
+    }
+}

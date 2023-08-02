@@ -1,0 +1,182 @@
+Start -> Statements
+
+
+Literal -> Number
+Literal -> String
+Literal -> Boolean
+
+PrimaryExpression -> '(' Expression ')'
+PrimaryExpression -> Literal
+PrimaryExpression -> Identifier
+PrimaryExpression -> FunctionCall
+
+
+
+//Arithmetic Expressions///////////////////////////////////////
+
+ArithmeticExpression -> AdditiveExpression
+
+AdditiveExpression -> AdditiveExpression '+' MultiplicativeExpression
+
+
+AdditiveExpression -> AdditiveExpression '-' MultiplicativeExpression
+
+AdditiveExpression -> MultiplicativeExpression
+
+MultiplicativeExpression -> MultiplicativeExpression '*' NegationExpression
+
+MultiplicativeExpression -> MultiplicativeExpression '/' NegationExpression
+
+MultiplicativeExpression -> NegationExpression
+
+
+NegationExpression -> "-" PrimaryExpression
+
+NegationExpression -> PrimaryExpression
+
+
+Number -> Number_Integer
+
+Number -> Number_Float
+
+
+
+
+//Variable  Declaration/////////////////////////////////////////////////////
+
+VariableDeclarationHelper -> Identifier "Is"
+
+VariableDeclarationHelper2 -> VariableDeclarationHelper Type
+VariableDeclarationHelper2 -> VariableDeclarationHelper VariableDeclarationHelper2
+
+VariableDeclarationStatement -> VariableDeclarationHelper2
+
+VariableDeclarationStatement -> InitializedVariableDeclaration
+
+InitializedVariableDeclaration -> VariableDeclarationHelper "=" Expression
+
+VariableAssignment -> Identifier "=" Expression
+
+
+//Expressions ////////////////////////////////////////////
+
+
+
+Expression -> ArithmeticExpression
+
+Expression -> InitializedVariableDeclaration
+
+Expression -> ExpressionStatement;
+
+
+//Expression Statments /////////////////////////////////
+
+ExpressionStatement -> VariableAssignment;
+ExpressionStatement -> FunctionCall;
+
+
+//Statements //////////////////////////////////////////
+
+
+
+
+Statements -> Statement
+
+Statements -> Statement Statements
+
+Statement -> PunctuatedStatement 
+Statement -> FunctionDefinition
+Statement -> BlockStatement ****************
+
+BlockStatement -> "<" Statements ">"
+
+
+PunctuatedStatement -> PunctuatedStatementHelper '.'
+
+PunctuatedStatementHelper -> VariableDeclarationStatement
+PunctuatedStatementHelper -> ReturnStatement
+PunctuatedStatementHelper -> PrintStatement
+
+
+
+//Types/////
+
+Type -> Type_Integer
+
+TYPE -> Type_Decimal
+
+TYPE -> Type_String
+
+TYPE -> type_boolean
+
+
+
+
+
+
+//Functions/////////////////////////////////////////////
+
+FunctionDefinition -> "Define" Signature "As" Type "=" BlockStatement
+
+Signature -> Identifier
+Signature -> Identifier Signature
+Signature -> FunctionArgument
+Signature -> FunctionArgument Signature
+
+
+
+FunctionArgument -> "<" Type Identifier ">"
+
+ReturnStatement -> "Result" "Is" Expression
+
+
+
+FunctionCallArgument -> Expression
+
+PrintStatement ->  Print Expression
+
+
+//////////////// Logical Expressions //////////////////////
+
+Boolean -> True
+Boolean -> False
+
+LogicalExpression -> OrExpression
+OrExpression -> OrExpression "Or" AndExpression | AndExpression
+AndExpression -> AndExpression "And" NotExpression | NotExpression
+NotExpression -> "Not" PrimaryExpression | PrimaryExpression
+Expresssion -> LogicalExpression
+
+
+
+////////////// If Statement /////////////////////////
+
+IfStatementHelper -> If expression 
+
+IfStatement -> StatementHelper Then Statement
+IfElseStatement -> IfStatement Else Statement
+
+Statement -> BlockStatement
+Statement -> IfStatement
+Statement -> IfThenElseStatement
+
+
+////////////////// While Statement /////////////////
+
+WhileStatement -> "While" Expression Statement
+
+Statement -> WhileStatement
+
+
+///////////////// Relational Expressions //////////////////
+
+
+
+RelationalExpressionSymbol -> ArithmeticExpressionSymbol RelationalOperatorSymbol ArithmeticExpressionSymbol
+RelationalExpressionSymbol -> ArithmeticExpressionSymbol RelationalOperatorSymbol RelationalExpressionSymbol
+
+RelationalOperatorSymbol -> LessSymbol
+RelationalOperatorSymbol -> LessEqualSymbol
+RelationalOperatorSymbol -> GreaterSymbol
+RelationalOperatorSymbol -> GreaterEqualSymbol
+
