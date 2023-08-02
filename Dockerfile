@@ -1,3 +1,3 @@
-From raw1218/riscv-qemu:latest
+From raw1218/riscv-jupyter:latest
 
 
