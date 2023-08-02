@@ -12,7 +12,11 @@ WORKDIR ${HOME}
 COPY . ${HOME}
 RUN pip install --no-cache notebook jupyterlab
 
+RUN jupyter --paths
+
+
 RUN jupyter kernelspec install ${HOME}/JupyterNotebook
+RUN jupyter --paths
 
 RUN cd /code && ls
 
