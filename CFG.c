@@ -67,7 +67,7 @@ bool compareSymbolsAndVal(void *a, void * b){
 bool compareSymbols(void *a, void *b) {
 
 
-    //for some reason, if you printf something, then it causes an infinite loop
+    //for some reason, if you //printf something, then it causes an infinite loop
     Symbol *symbol1 = (Symbol*)a;
     Symbol *symbol2 = (Symbol*)b;
     
@@ -999,7 +999,7 @@ void printSymbol(Symbol symbol) {
 
     if(symbol.isHelper){
 
-        printf("helper symbol int = %d  ", symbol.nonTerminal);
+        //printf("helper symbol int = %d  ", symbol.nonTerminal);
         return;
     }
 
@@ -1007,44 +1007,44 @@ void printSymbol(Symbol symbol) {
 
 
     if (symbol.isTerminal) {
-        printf("Terminal: %s  ", terminalNames[symbol.terminal]);
+        //printf("Terminal: %s  ", terminalNames[symbol.terminal]);
     } else {
-        printf("Non-terminal: %s  ", nonTerminalNames[symbol.nonTerminal]);
+        //printf("Non-terminal: %s  ", nonTerminalNames[symbol.nonTerminal]);
     }
 
 
     if(compareSymbols(&symbol, &StringSymbol)){
         char * val = symbol.value;
-        printf("Val = %s  ", val);
+        //printf("Val = %s  ", val);
     }
 
 
 
     if(compareSymbols(&symbol, &FunctionCallArgumentSymbol)){
         char * val = (char*)symbol.value;
-        printf("Val = %s  ", val);
+        //printf("Val = %s  ", val);
     }
 
 
     if(compareSymbols(&symbol, &FunctionKeywordSymbol)){
         char * val = (char*)symbol.value;
-        printf("Val = %s   ", val);
+        //printf("Val = %s   ", val);
     }
 
 
     if(compareSymbols(&symbol, &NumberIntegerSymbol)){
         int val = *(int*)symbol.value;
-        printf(" Val = %d  ", val);
+        //printf(" Val = %d  ", val);
     }
 
     if(compareSymbols(&symbol, &NumberFloatSymbol)){
         double val = *(double*)symbol.value;
-        printf("  Val = %lf  ", val);
+        //printf("  Val = %lf  ", val);
     }
 
     if(compareSymbols(&symbol, &IdentifierSymbol)){
         char * val = (char *)symbol.value;
-        printf("  Val = %s  ", val);
+        //printf("  Val = %s  ", val);
     }
 }
 
@@ -1053,37 +1053,37 @@ void printSymbol(Symbol symbol) {
 
 void printSymbolSet(Set * set){
 
-    printf("about to print symbol set\n");
+    //printf("about to print symbol set\n");
     SetNode * node = set->head;
     while(node != NULL){
 
         Symbol * sym = (Symbol *)node->data;
-        printf(" ");
+        //printf(" ");
         printSymbol(*sym);
     }
 
-    printf("done printing symbol set\n");
+    //printf("done printing symbol set\n");
 }
 
 void _printRule(Rule rule, int dot_position) {
-    printf("LHS: ");
+    //printf("LHS: ");
     printSymbol(rule.lhs);
-    printf("\n");
+    //printf("\n");
 
-    printf("RHS: ");
+    //printf("RHS: ");
     for (int i = 0; i < rule.rhs_len; i++) {
         if (i == dot_position) {
-            printf("     .      ");
+            //printf("     .      ");
         }
         printSymbol(rule.rhs[i]);
     }
 
     // Print the dot at the end if the dot position is at the end of RHS
     if (dot_position == rule.rhs_len) {
-        printf("     .      ");
+        //printf("     .      ");
     }
 
-    printf("\n\n");
+    //printf("\n\n");
 }
 
 void printRule(Rule rule){
@@ -1093,7 +1093,7 @@ void printRule(Rule rule){
 
 
 void printGrammarItemSet(Set * set){
-    printf("printing grammar Item set\n");
+    //printf("printing grammar Item set\n");
     SetNode * node = set->head;
     while(node != NULL){
 
@@ -1107,53 +1107,53 @@ void printGrammarItemSet(Set * set){
 void printStateSet(Set* stateSet) {
     SetNode* currentNode = stateSet->head;
 
-    printf("State Set: { ");
+    //printf("State Set: { ");
     while (currentNode != NULL) {
         State * state = (State*)currentNode->data;
         printState(*state);
         currentNode = currentNode->next;
     }
-    printf("}\n");
+    //printf("}\n");
 }
 
 
 
 void printActionTable(LRTable* table) {
-    printf("ACTION Table:\n");
+    //printf("ACTION Table:\n");
 
     // Print column headers (terminals)
-    printf("%-4s", "");
+    //printf("%-4s", "");
     for (int i = 0; i < table->numStates; i++) {
-        printf("%-4d", i);
+        //printf("%-4d", i);
     }
-    printf("\n");
+    //printf("\n");
 
     // Print horizontal line for table
     for (int i = 0; i <= table->numStates; i++) {
-        printf("----");
+        //printf("----");
     }
-    printf("\n");
+    //printf("\n");
 
     // Print row headers (states) and corresponding entries in the ACTION table
     for (int i = 0; i < (table->numTerminals + table->numNonTerminals); i++) {
-        printf("%-4d|", i);
+        //printf("%-4d|", i);
         for (int j = 0; j < (table->numStates); j++) {
             Action action = table->actionTable[i][j];
             switch (action.type) {
                 case ACTION_SHIFT:
-                    printf("S%-3d", action.value);
+                    //printf("S%-3d", action.value);
                     break;
                 case ACTION_REDUCE:
-                    printf("R%-3d", action.value);
+                    //printf("R%-3d", action.value);
                     break;
                 case ACTION_ACCEPT:
-                    printf("%-4s", "A");
+                    //printf("%-4s", "A");
                     break;
                 default:
-                    printf("%-4s", "E");
+                    //printf("%-4s", "E");
             }
         }
-        printf("\n");
+        //printf("\n");
     }
 }
 
@@ -1194,11 +1194,11 @@ int main() {
 
 
 
-        printf("\n\n\n about to print the gototable:\n");
+        //printf("\n\n\n about to print the gototable:\n");
         printGOTOTable(table);
 
 
-        printf("\n\n\n about to print action table\n\n");
+        //printf("\n\n\n about to print action table\n\n");
         printActionTable(table);
 
      

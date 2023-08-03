@@ -7,7 +7,7 @@
 #include <string.h>
 #include "Lexer2.h"
 #include "ASTWalker.h"
-
+#include <omp.h>
 
 typedef enum {
     LR_STACK_STATE,
@@ -644,12 +644,22 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
     while (!isQueueEmpty(queue)) {
         // Dequeue the next state
         State* state = dequeue(queue);
+        omp_set_num_threads(4);
         
-      
+        #pragma omp parallel
+        {
 
+            #pragma omp sections
+            {
+
+            
+
+                #pragma omp section
+                {
         // Process each terminal symbol
         for (int i = 0; i < NUM_TERMINALS; i++) {
 
+          //  printf("terminal i = %d\n", i);
             Symbol symbol = createSymbol(true, i);
             // Generate the next state using GOTO function
             State* nextState = GOTO(state, &symbol, rules, num_rules);
@@ -669,8 +679,12 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
                 else{
                     // Add the next state to the set of states and the queue
                     nextState->id = states->size;
+
+                    #pragma omp critical
+                    {
                     addToSet(states, nextState);
                     enqueue(queue, nextState);
+                    }
 
                     // Fill the GOTO table
                     table->gotoTable[i][state->id] = nextState->id;
@@ -682,8 +696,14 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
 
         }
 
+                }
+
+                #pragma omp section
+                {
         // Process each non-terminal symbol
         for (int i = 0; i < NUM_NON_TERMINALS; i++) {
+           // printf("nonterminal i = %d\n", i);
+
             int j = i + NUM_TERMINALS;
             Symbol symbol = createSymbol(false, i);
             // Generate the next state using GOTO function
@@ -703,8 +723,12 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
 
                 else{
                     nextState->id = states->size;
+
+                    #pragma omp critical
+                    {
                     addToSet(states, nextState);
                     enqueue(queue, nextState);
+                    }
 
                     // Fill the GOTO table
                     // The non-terminals entries start after the terminal ones
@@ -715,11 +739,14 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
             }
 
         }
+                }
 
-
+                #pragma omp section
+                {
         //Process each FunctionKeyword Symbol
         for(int i = 0; i < parser->numFunctionKeywords; i++){
-            
+                        //printf("funckeyword i = %d\n", i);
+
             char * word = parser->functionKeywords[i];
            int j = i + NUM_TERMINALS + NUM_NON_TERMINALS;
 
@@ -729,9 +756,6 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
            symbol.functionKeywordIndex = i;
            //printf(" about to hit GOTO, processing funcgionKeyword index = %d\n", i);
            State * nextState = GOTO(state, &symbol, rules, num_rules); 
-         //  printf("processing functionKeyword symbols, state id = %d,  word = %s, j = %d\n", state->id, word, j);
-           // if(nextState == NULL)printf("next state is null\n");
-           // else printf("next state id = %d", nextState->id);
 
             // If the next state is not null and it's not already in the set of states
             if(nextState != NULL){
@@ -747,8 +771,12 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
 
                 else{
                     nextState->id = states->size;
+
+                    #pragma omp critical
+                    {
                     addToSet(states, nextState);
                     enqueue(queue, nextState);
+                    }
 
                     // Fill the GOTO table
                     // The non-terminals entries start after the terminal ones
@@ -758,16 +786,17 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
                 }
             }
         }
+                }
 
 
 
-
-
+                #pragma omp section
+                {
         //Process each Helper Symbol
         for(int i = 0; i < parser->helperCount; i++){
 
 
-
+            //printf("herlper = %d\n", i);
            Symbol symbol = {.compareValue = false, .isHelper = true, .isTerminal = false, .nonTerminal = i };
             int j = symbolToInt(symbol, parser);
 
@@ -786,7 +815,7 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
                 if(setContains(states,nextState)){
 
                     int nextID = getIdByState(states, *nextState);
-                    printf("next ID = %d", nextID);
+                   // printf("next ID = %d", nextID);
                     
                     table->gotoTable[j][state->id] = nextID;
 
@@ -794,8 +823,11 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
 
                 else{
                     nextState->id = states->size;
+                    #pragma omp critical
+                    {
                     addToSet(states, nextState);
                     enqueue(queue, nextState);
+                    }
 
                     // Fill the GOTO table
                     // The non-terminals entries start after the terminal ones
@@ -805,6 +837,12 @@ Set* generateCanonicalCollectionAndFillGOTOTable(LRParser * parser) {
                 }
             }
         }
+    
+                }
+    
+            }//end omp sections
+            #pragma omp barrier
+    } // end omp parallel
 
     }
 
