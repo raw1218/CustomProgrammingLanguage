@@ -1,4 +1,4 @@
-From raw1218/riscv-jupyter:binder
+From raw1218/riscv-language:binder
 ARG NB_USER
 ARG NB_UID
 ENV USER ${NB_USER}
@@ -10,18 +10,17 @@ RUN adduser --disabled-password \
 WORKDIR ${HOME}
 
 COPY . ${HOME}
-RUN pip install --no-cache notebook jupyterlab
-RUN pip install --no-cache-dir jupyterhub
 
 
 
-RUN jupyter --paths
 
 
-RUN jupyter kernelspec install ${HOME}/JupyterNotebook
-RUN jupyter --paths
 
-RUN cd /code && ls
+
+
+
+
+
 
 
 
