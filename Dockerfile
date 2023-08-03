@@ -11,7 +11,6 @@ WORKDIR ${HOME}
 
 COPY . ${HOME}
 
-WORKDIR ${HOME}
 
 
 
