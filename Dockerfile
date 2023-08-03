@@ -11,6 +11,9 @@ WORKDIR ${HOME}
 
 COPY . ${HOME}
 RUN pip install --no-cache notebook jupyterlab
+RUN pip install --no-cache-dir jupyterhub
+
+
 
 RUN jupyter --paths
 
